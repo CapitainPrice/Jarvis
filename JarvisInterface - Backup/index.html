@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS — Sistema de Inteligência Artificial</title>
+    <link rel="stylesheet" href="style/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/imgs/Jarvis.png" type="image/png">
+
+    <!-- Extra HUD enhancements injected into index -->
+    <style>
+    /* ── EXTRA HUD ENHANCEMENTS ── */
+    :root {
+        --hud-accent: #00d4ff;
+        --hud-green: #00ff88;
+        --hud-orange: #ff8c42;
+        --hud-red: #ff3366;
+    }
+
+    /* Holographic corner brackets on panels */
+    .hud-panel {
+        position: relative;
+        transition: box-shadow 0.4s ease;
+    }
+    .hud-panel:hover {
+        box-shadow: 0 0 40px rgba(0,212,255,0.25), inset 0 0 20px rgba(0,212,255,0.04);
+    }
+    .hud-panel::after {
+        content: '';
+        position: absolute;
+        bottom: 0; right: 0;
+        width: 18px; height: 18px;
+        border-bottom: 2px solid rgba(0,212,255,0.5);
+        border-right: 2px solid rgba(0,212,255,0.5);
+        pointer-events: none;
+    }
+    .hud-panel::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 18px; height: 18px;
+        border-top: 2px solid rgba(0,212,255,0.5);
+        border-left: 2px solid rgba(0,212,255,0.5);
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    /* Glitch text on JARVIS title */
+    .core-label h1 {
+        position: relative;
+        animation: glitchCycle 8s infinite;
+    }
+    @keyframes glitchCycle {
+        0%, 90%, 100% { text-shadow: 0 0 30px #00d4ff, 0 0 60px rgba(0,212,255,0.5); clip-path: none; transform: none; }
+        92% { clip-path: inset(20% 0 30% 0); transform: translate(-3px, 0); text-shadow: -3px 0 #ff3366, 3px 0 #00ffff; }
+        94% { clip-path: inset(50% 0 10% 0); transform: translate(3px, 0); text-shadow: 3px 0 #ff3366, -3px 0 #00ffff; }
+        96% { clip-path: none; transform: none; }
+    }
+
+    /* Pulse rings on panels */
+    .panel-earth .earth-hologram,
+    .panel-radar .radar-hologram {
+        position: relative;
+    }
+    .panel-earth .earth-hologram::after,
+    .panel-radar .radar-hologram::after {
+        content: '';
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        border: 1px solid rgba(0,212,255,0.2);
+        animation: ringExpand 3s ease-out infinite;
+    }
+    @keyframes ringExpand {
+        0% { transform: scale(0.95); opacity: 0.6; }
+        100% { transform: scale(1.15); opacity: 0; }
+    }
+
+    /* HUD corner decorations - screen-wide */
+    .hud-frame-tl, .hud-frame-tr, .hud-frame-bl, .hud-frame-br {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        z-index: 1000;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+    .hud-frame-tl { top: 8px; left: 8px; border-top: 2px solid var(--hud-accent); border-left: 2px solid var(--hud-accent); }
+    .hud-frame-tr { top: 8px; right: 8px; border-top: 2px solid var(--hud-accent); border-right: 2px solid var(--hud-accent); }
+    .hud-frame-bl { bottom: 8px; left: 8px; border-bottom: 2px solid var(--hud-accent); border-left: 2px solid var(--hud-accent); }
+    .hud-frame-br { bottom: 8px; right: 8px; border-bottom: 2px solid var(--hud-accent); border-right: 2px solid var(--hud-accent); }
+
+    /* Crosshair dots at corners */
+    .hud-frame-tl::before, .hud-frame-tr::before,
+    .hud-frame-bl::before, .hud-frame-br::before {
+        content: '';
+        position: absolute;
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--hud-accent);
+        box-shadow: 0 0 8px var(--hud-accent);
+        animation: cornerPulse 2s ease-in-out infinite;
+    }
+    .hud-frame-tl::before { top: -3px; left: -3px; }
+    .hud-frame-tr::before { top: -3px; right: -3px; }
+    .hud-frame-bl::before { bottom: -3px; left: -3px; }
+    .hud-frame-br::before { bottom: -3px; right: -3px; }
+    @keyframes cornerPulse {
+        0%, 100% { opacity: 0.4; box-shadow: 0 0 4px var(--hud-accent); }
+        50% { opacity: 1; box-shadow: 0 0 12px var(--hud-accent), 0 0 20px rgba(0,212,255,0.3); }
+    }
+
+    /* Animated top-bar separator */
+    .top-bar {
+        position: relative;
+    }
+    .top-bar::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--hud-accent), var(--hud-green), var(--hud-accent), transparent);
+        background-size: 200% 100%;
+        animation: barSweep 4s linear infinite;
+    }
+    @keyframes barSweep {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+
+    /* Floating data tags */
+    .hud-datatag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 8px;
+        background: rgba(0,212,255,0.08);
+        border: 1px solid rgba(0,212,255,0.2);
+        border-radius: 3px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.6rem;
+        color: rgba(0,212,255,0.7);
+        letter-spacing: 1px;
+    }
+    .hud-datatag::before {
+        content: '';
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: var(--hud-green);
+        box-shadow: 0 0 6px var(--hud-green);
+        animation: dotBlink 1.5s ease-in-out infinite;
+    }
+    @keyframes dotBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+    }
+
+    /* Status row enhancements */
+    .sr {
+        position: relative;
+        overflow: hidden;
+    }
+    .sr::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(0,212,255,0.15), transparent);
+    }
+
+    /* Enhanced wave bars */
+    .wave {
+        background: linear-gradient(180deg, var(--hud-accent), rgba(0,212,255,0.2)) !important;
+        border-radius: 2px 2px 0 0;
+    }
+
+    /* Log lines styling */
+    .log-line {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.5px;
+        padding: 2px 0;
+        border-bottom: 1px solid rgba(0,212,255,0.04);
+        transition: color 0.3s;
+    }
+    .log-line:hover {
+        color: var(--hud-accent) !important;
+    }
+
+    /* Display circles glow */
+    .display-circle {
+        box-shadow: 0 0 15px rgba(0,212,255,0.3), inset 0 0 10px rgba(0,212,255,0.1) !important;
+        transition: all 0.3s;
+    }
+    .display-circle:hover {
+        box-shadow: 0 0 25px rgba(0,212,255,0.6), inset 0 0 15px rgba(0,212,255,0.2) !important;
+        transform: scale(1.05);
+    }
+
+    /* Portfolio button extra effects */
+    .portfolio-btn {
+        position: relative;
+        overflow: hidden;
+    }
+    .portfolio-btn::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+        transition: left 0.5s ease;
+    }
+    .portfolio-btn:hover::after {
+        left: 100%;
+    }
+
+    /* Links sidebar backdrop */
+    .links-sidebar {
+        backdrop-filter: blur(16px) !important;
+    }
+
+    /* System core stats */
+    .cs-item {
+        transition: all 0.3s;
+    }
+    .cs-item:hover .cs-v {
+        text-shadow: 0 0 20px var(--hud-accent) !important;
+        transform: scale(1.05);
+        display: inline-block;
+    }
+
+    /* Voice waveform enhanced */
+    .vsb-waveform span {
+        background: linear-gradient(180deg, var(--hud-accent), rgba(0,212,255,0.3)) !important;
+        border-radius: 2px;
+    }
+
+    /* Scan overlay (subtle) */
+    .scan-overlay {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,212,255,0.01) 0%, transparent 50%, rgba(0,212,255,0.01) 100%);
+        pointer-events: none;
+        z-index: 9998;
+        animation: scanMove 6s ease-in-out infinite;
+    }
+    @keyframes scanMove {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
+
+    /* Enhanced loading bars */
+    .loading-progress {
+        position: relative;
+        overflow: hidden;
+    }
+    .loading-progress::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 200%; }
+    }
+
+    /* Phase badges on ph-badge */
+    .ph-badge {
+        font-size: 0.55rem !important;
+        letter-spacing: 2px;
+        padding: 2px 8px;
+        border-radius: 3px;
+        animation: badgePulse 3s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+    }
+
+    /* Data streams background effect */
+    .splash-stream {
+        filter: blur(0.5px);
+    }
+
+    /* Arc reactor enhanced glow */
+    .arc-core {
+        box-shadow: 0 0 20px var(--hud-accent), 0 0 40px rgba(0,212,255,0.4), 0 0 80px rgba(0,212,255,0.2) !important;
+    }
+    </style>
+</head>
+
+<audio id="quemAudio" preload="auto">
+    <source src="assets/sounds/quem.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const btnQuem = document.querySelector(".portfolio-btn");
+    const audioQuem = document.getElementById("quemAudio");
+
+    if (btnQuem && audioQuem) {
+        btnQuem.addEventListener("click", function (e) {
+            e.preventDefault();
+            audioQuem.currentTime = 0;
+            audioQuem.play().catch(() => {});
+            setTimeout(() => {
+                window.location.href = btnQuem.href;
+            }, 5000);
+        });
+    }
+});
+</script>
+<body>
+    <!-- HUD Frame Corners -->
+    <div class="hud-frame-tl"></div>
+    <div class="hud-frame-tr"></div>
+    <div class="hud-frame-bl"></div>
+    <div class="hud-frame-br"></div>
+    <div class="scan-overlay"></div>
+
+    <!-- ══════════════════════════════════════════
+         SPLASH SCREEN — JARVIS BOOT
+         ══════════════════════════════════════════ -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-grid"></div>
+        <div class="splash-scanlines"></div>
+        <div class="splash-corner splash-corner-tl"></div>
+        <div class="splash-corner splash-corner-tr"></div>
+        <div class="splash-corner splash-corner-bl"></div>
+        <div class="splash-corner splash-corner-br"></div>
+        <div class="splash-particles">
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+            <div class="splash-particle"></div>
+        </div>
+        <div class="splash-ring-container">
+            <div class="splash-ring splash-ring-5"></div>
+            <div class="splash-ring splash-ring-4"></div>
+            <div class="splash-ring splash-ring-1"></div>
+            <div class="splash-ring splash-ring-2"></div>
+            <div class="splash-ring splash-ring-3"></div>
+            <div class="splash-core"></div>
+        </div>
+        <div class="splash-hex-grid"></div>
+        <div class="splash-sweep"></div>
+        <div class="splash-hud-lines">
+            <div class="splash-hline"></div>
+            <div class="splash-hline"></div>
+            <div class="splash-hline"></div>
+            <div class="splash-hline"></div>
+        </div>
+        <div class="splash-data-streams">
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+            <div class="splash-stream"></div>
+        </div>
+        <div class="splash-diag-lines" id="splashDiagLines">
+            <div class="splash-diag-line">&gt; BOOT SEQUENCE v4.1.0 INITIATED</div>
+            <div class="splash-diag-line">&gt; NEURAL CORES: 4.821 NODES ACTIVE</div>
+            <div class="splash-diag-line">&gt; MEMORY HEAP: 2.1 GB ALLOCATED</div>
+            <div class="splash-diag-line">&gt; VOICE ENGINE: ELEVENLABS LINK SECURED</div>
+            <div class="splash-diag-line">&gt; THREAT LEVEL: ALPHA — MONITORING</div>
+            <div class="splash-diag-line">&gt; HUD INTERFACE: RENDERING...</div>
+        </div>
+        <div class="splash-progress-stats" id="splashProgressStats">
+            <div class="sps-row">
+                <span class="sps-label">MEMORY</span>
+                <span class="sps-bar"><span class="sps-fill" id="spsMemory"></span></span>
+                <span class="sps-val" id="spsMemoryVal">0%</span>
+            </div>
+            <div class="sps-row">
+                <span class="sps-label">NEURAL</span>
+                <span class="sps-bar"><span class="sps-fill" id="spsNeural"></span></span>
+                <span class="sps-val" id="spsNeuralVal">0%</span>
+            </div>
+            <div class="sps-row">
+                <span class="sps-label">VOICE</span>
+                <span class="sps-bar"><span class="sps-fill" id="spsVoice"></span></span>
+                <span class="sps-val" id="spsVoiceVal">0%</span>
+            </div>
+            <div class="sps-row">
+                <span class="sps-label">SECURE</span>
+                <span class="sps-bar"><span class="sps-fill sps-fill-green" id="spsSecure"></span></span>
+                <span class="sps-val" id="spsSecureVal">0%</span>
+            </div>
+        </div>
+        <div class="splash-arc-reactor">
+            <div class="arc-ring arc-r1"></div>
+            <div class="arc-ring arc-r2"></div>
+            <div class="arc-ring arc-r3"></div>
+            <div class="arc-core"></div>
+            <div class="arc-triangles"></div>
+        </div>
+        <div class="splash-sys-id">
+            <div class="splash-sys-row"><span class="splash-sys-label">UNIT</span><span class="splash-sys-value">J.A.R.V.I.S</span></div>
+            <div class="splash-sys-row"><span class="splash-sys-label">VER</span><span class="splash-sys-value">4.1.0-STABLE</span></div>
+            <div class="splash-sys-row"><span class="splash-sys-label">CORE</span><span class="splash-sys-value">STARK-AI-X9</span></div>
+            <div class="splash-sys-row"><span class="splash-sys-label">AUTH</span><span class="splash-sys-value">LEVEL-05</span></div>
+            <div class="splash-sys-row"><span class="splash-sys-label">NET</span><span class="splash-sys-value">ENCRYPTED</span></div>
+            <div class="splash-sys-row"><span class="splash-sys-label">STATUS</span><span class="splash-sys-value">BOOTING...</span></div>
+        </div>
+        <div class="splash-text-container">
+            <div class="splash-title">JARVIS</div>
+            <div class="splash-subtitle">JUST A RATHER VERY INTELLIGENT SYSTEM</div>
+            <div class="splash-loading">
+                <div class="splash-loading-text">
+                    <span>SISTEMAS</span>
+                    <span id="splashPercent">0%</span>
+                </div>
+                <div class="splash-loading-bar"></div>
+            </div>
+            <div class="splash-status" id="splashStatus">INICIALIZANDO...</div>
+        </div>
+        <audio id="splashAudio" preload="auto">
+            <source src="assets/sounds/inicializando.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="boot01Audio" preload="auto">
+            <source src="assets/sounds/boot_01.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="boot02Audio" preload="auto">
+            <source src="assets/sounds/boot_02.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="quemAudio2" preload="auto">
+            <source src="assets/sounds/quem.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <div class="scanline-overlay"></div>
+    <div class="hud-container">
+        <div class="grid-background"></div>
+
+        <!-- ── TOP BAR ── -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <span class="tb-label">SYS</span>
+                <span class="tb-value" id="cpuVal">CPU 34%</span>
+                <span class="tb-sep">|</span>
+                <span class="tb-value" id="memVal">MEM 61%</span>
+                <span class="tb-sep">|</span>
+                <span class="tb-value" id="netVal">NET ↑ 2.4 MB/s</span>
+            </div>
+            <div class="top-bar-center">
+                <span class="tb-brand">J.A.R.V.I.S</span>
+                <span class="tb-subtitle">ADVANCED AI CONTROL SYSTEM v4.1</span>
+            </div>
+            <div class="top-bar-right">
+                <span class="tb-clock" id="clockDisplay">00:00:00</span>
+                <span class="tb-sep">|</span>
+                <span class="tb-date" id="dateDisplay">--/--/----</span>
+            </div>
+        </div>
+
+        <!-- ── LEFT COLUMN ── -->
+        <div class="col-left">
+            <div class="hud-panel panel-earth">
+                <div class="panel-header">
+                    <span class="ph-dot"></span>
+                    <span class="ph-title">EARTH STATUS</span>
+                    <span class="ph-badge">NWO</span>
+                </div>
+                <div class="earth-hologram">
+                    <img src="assets/imgs/earthhologram.gif" alt="Earth Hologram" class="earth-gif">
+                    <div class="earth-ring"></div>
+                </div>
+                <div class="status-rows">
+                    <div class="sr"><span class="sr-l">SECTOR</span><span class="sr-v">N33-ALPHA</span></div>
+                    <div class="sr"><span class="sr-l">NWO</span><span class="sr-v green">ACTIVATED</span></div>
+                    <div class="sr"><span class="sr-l">SHIELD</span><span class="sr-v">100%</span></div>
+                    <div class="sr"><span class="sr-l">THREAT</span><span class="sr-v orange">MODERATE</span></div>
+                </div>
+            </div>
+
+            <div class="hud-panel panel-systems">
+                <div class="panel-header">
+                    <span class="ph-dot"></span>
+                    <span class="ph-title">SYSTEM CORES</span>
+                </div>
+                <div class="loading-systems" id="loadingSystems">
+                    <div class="loading-item">
+                        <div class="li-top"><span class="loading-text">CPU (JS THREAD)</span><span class="li-pct" id="p0">25%</span></div>
+                        <div class="loading-bar"><div class="loading-progress lp-blue" id="b0" style="width:25%"></div></div>
+                    </div>
+                    <div class="loading-item">
+                        <div class="li-top"><span class="loading-text">MEMÓRIA</span><span class="li-pct" id="p1">25%</span></div>
+                        <div class="loading-bar"><div class="loading-progress lp-cyan" id="b1" style="width:25%"></div></div>
+                    </div>
+                    <div class="loading-item">
+                        <div class="li-top"><span class="loading-text">REDE (DOWNLINK)</span><span class="li-pct" id="p2">75%</span></div>
+                        <div class="loading-bar"><div class="loading-progress lp-green" id="b2" style="width:75%"></div></div>
+                    </div>
+                    <div class="loading-item">
+                        <div class="li-top"><span class="loading-text">CARGA DO SISTEMA</span><span class="li-pct" id="p3">40%</span></div>
+                        <div class="loading-bar"><div class="loading-progress lp-orange" id="b3" style="width:40%"></div></div>
+                    </div>
+                </div>
+                <div class="mini-chart" id="miniChart">
+                    <canvas id="chartCanvas" width="200" height="60"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── CENTER COLUMN ── -->
+        <div class="col-center">
+            <div class="hud-panel panel-core">
+                <div class="panel-header">
+                    <span class="ph-dot"></span>
+                    <span class="ph-title">JARVIS CORE</span>
+                    <span class="ph-badge online">ONLINE</span>
+                </div>
+
+                <div class="core-visualizer">
+                    <canvas id="coreCanvas"></canvas>
+                    <div class="core-label">
+                        <h1>JARVIS</h1>
+                        <div class="core-tagline">JUST A RATHER VERY INTELLIGENT SYSTEM</div>
+                    </div>
+                    <div class="core-stats">
+                        <div class="cs-item"><span class="cs-v" id="csThink">—</span><span class="cs-l">TTFB</span></div>
+                        <div class="cs-item"><span class="cs-v" id="csReq">—</span><span class="cs-l">HEAP JS</span></div>
+                        <div class="cs-item"><span class="cs-v" id="csTemp">—</span><span class="cs-l">UPTIME</span></div>
+                    </div>
+                </div>
+
+                <div class="voice-row">
+                    <elevenlabs-convai agent-id="agent_6301kpggr559entsxng0agcb5prf"></elevenlabs-convai>
+                    <div class="voice-info">
+                        <div class="el-hud-label" id="voiceStatus"></div>
+                        <div class="vsb-waveform" id="voiceWave">
+                            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <button class="tm-open-btn" id="openLinksSidebar" title="Links">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                        Acesso Rápido
+                    </button>
+                    <a href="portfolio-publico.html" class="tm-open-btn portfolio-btn" title="Portfólio">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                        </svg>
+                        QUEM SOU EU
+                    </a>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message jarvis-message">
+                        <div class="message-content">
+                            <p>JARVIS ONLINE. TODOS OS SISTEMAS CARREGADOS E PRONTOS.</p>
+                            <span class="message-time">SISTEMA INICIADO</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── RIGHT COLUMN ── -->
+        <div class="col-right">
+            <div class="hud-panel panel-radar">
+                <div class="panel-header">
+                    <span class="ph-dot"></span>
+                    <span class="ph-title">TRACKING SYSTEM</span>
+                    <span class="ph-badge online">ONLINE</span>
+                </div>
+                <div class="radar-hologram">
+                    <img src="assets/imgs/radar.gif" alt="Radar Display" class="radar-gif">
+                </div>
+            </div>
+
+            <div class="hud-panel panel-log">
+                <div class="panel-header">
+                    <span class="ph-dot"></span>
+                    <span class="ph-title">SYSTEM LOG</span>
+                </div>
+                <div class="data-log">
+                    <div class="log-content" id="logContent">
+                        <div class="log-line">[SYSTEM] JARVIS INITIALIZED</div>
+                        <div class="log-line">[AUDIO] VOICE RECOGNITION ACTIVE</div>
+                        <div class="log-line">[NETWORK] ELEVENLABS CONNECTED</div>
+                        <div class="log-line">[STATUS] ALL SYSTEMS OPERATIONAL</div>
+                        <div class="log-line">[READY] AWAITING USER INPUT</div>
+                    </div>
+                </div>
+
+                <div class="data-displays">
+                    <div class="display-circle"><div class="circle-label" id="dc0">DY</div></div>
+                    <div class="display-circle"><div class="circle-label" id="dc1">53</div></div>
+                    <div class="display-circle"><div class="circle-label" id="dc2">PH</div></div>
+                    <div class="display-circle"><div class="circle-label" id="dc3">KL</div></div>
+                </div>
+
+                <div class="wave-displays">
+                    <div class="wave-container">
+                        <div class="wave w1"></div><div class="wave w2"></div><div class="wave w3"></div>
+                        <div class="wave w2"></div><div class="wave w1"></div><div class="wave w3"></div>
+                    </div>
+                    <div class="wave-container">
+                        <div class="wave w3"></div><div class="wave w1"></div><div class="wave w2"></div>
+                        <div class="wave w1"></div><div class="wave w3"></div><div class="wave w2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /hud-container -->
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- LINKS HORIZONTAL SIDEBAR             -->
+    <!-- ══════════════════════════════════════ -->
+    <div class="links-sidebar" id="linksSidebar">
+        <div class="lsb-header">
+            <div class="lsb-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                LINKS
+            </div>
+            <div class="lsb-add">
+                <input type="text" class="lsb-input" id="bmNameInput" placeholder="NOME..." maxlength="40">
+                <input type="text" class="lsb-input lsb-url" id="bmUrlInput" placeholder="URL..." maxlength="300">
+                <select class="lsb-select" id="bmTarget">
+                    <option value="_blank">&#x2197;</option>
+                    <option value="_self">&#x2192;</option>
+                </select>
+                <button class="lsb-add-btn" id="addBmBtn">+</button>
+            </div>
+            <button class="lsb-close" id="closeLinksSidebar">&#x2715;</button>
+        </div>
+        <div class="lsb-chips" id="bmList">
+            <div class="lsb-empty" id="bmEmpty">NENHUM LINK — ADICIONE ACIMA</div>
+        </div>
+    </div>
+
+    <!-- Voice Indicator -->
+    <div class="voice-indicator" id="voiceIndicator">
+        <div class="vi-dot"></div>
+        <span id="voiceIndicatorText">ESCUTANDO...</span>
+    </div>
+
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+    <script src="style/js/script.js"></script>
+</body>
+</html>
