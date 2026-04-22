@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \":*)",
+      "Bash(xxd \"C:/Users/guiem/Downloads/JarvisInterface - Backup/index.html\")",
+      "Bash(xxd)"
+    ]
+  }
+}
