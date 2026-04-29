@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GUILHERME GONÇALVES · PORTFOLIO</title>
+  <link rel="stylesheet" href="style/css/portfolio.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- SPLASH SCREEN -->
+  <div id="splash-screen">
+    <video id="intro-video" autoplay muted playsinline>
+      <source src="assets/video/intro.mp4" type="video/mp4" />
+    </video>
+    <!-- Audio for splash screen -->
+    <audio id="splash-audio" loop>
+      <source src="assets/audio/splash.mp3" type="audio/mpeg" />
+    </audio>
+    <div id="splash-overlay">
+      <div class="splash-loader">
+        <div class="splash-ring"></div>
+        <div class="splash-ring splash-ring--2"></div>
+        <span class="splash-text" data-pt="INICIALIZANDO SISTEMA..." data-en="INITIALIZING SYSTEM...">Carregando Informações...</span>
+      </div>
+    </div>
+    <button id="splash-skip" data-pt="PULAR INTRO" data-en="SKIP INTRO">PULAR INTRO</button>
+  </div>
+
+  <!-- MAIN PORTFOLIO -->
+  <div id="portfolio" class="hidden">
+
+    <!-- TOP NAV BAR -->
+    <nav id="topbar">
+      <div class="topbar-left">
+        <div class="hud-logo">
+          <span class="logo-bracket">[</span>
+          <span class="logo-name">GG</span>
+          <span class="logo-bracket">]</span>
+        </div>
+        <div class="system-status">
+          <span class="status-dot"></span>
+          <span class="status-text" data-pt="SISTEMA ONLINE" data-en="SYSTEM ONLINE">SISTEMA ONLINE</span>
+        </div>
+      </div>
+
+      <div class="topbar-nav">
+        <a href="#about" class="nav-link" data-pt="SOBRE" data-en="ABOUT">SOBRE</a>
+        <a href="#projects" class="nav-link" data-pt="PROJETOS" data-en="PROJECTS">PROJETOS</a>
+        <a href="#skills" class="nav-link" data-pt="SKILLS" data-en="SKILLS">SKILLS</a>
+        <a href="#certs" class="nav-link" data-pt="CERTS" data-en="CERTS">CERTS</a>
+        <a href="#contact" class="nav-link" data-pt="CONTATO" data-en="CONTACT">CONTATO</a>
+      </div>
+
+      <div class="topbar-right">
+        <button id="mobile-menu-btn" class="hud-btn mobile-only" aria-label="Menu">
+          <span>☰</span>
+        </button>
+        <button id="lang-toggle" class="hud-btn" title="Toggle Language">
+          <span id="lang-icon">🌐</span>
+          <span id="lang-label">EN</span>
+        </button>
+        <button id="print-btn" class="hud-btn" title="Imprimir Currículo">
+          <span>⬇</span>
+          <span data-pt="CURRÍCULO" data-en="RESUME">CURRÍCULO</span>
+        </button>
+        <a href="index.html" class="hud-btn hud-btn--accent" id="back-jarvis">
+          <span class="btn-icon">◈</span>
+          <span data-pt="VOLTAR AO JARVIS" data-en="BACK TO JARVIS">VOLTAR AO JARVIS</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- CANVAS BACKGROUND -->
+    <canvas id="hud-canvas"></canvas>
+
+    <!-- HERO SECTION -->
+    <section id="hero">
+      <!-- Background Video (same as splash, plays once) -->
+      <div id="hero-video-container">
+        <video id="hero-video" autoplay muted playsinline>
+          <source src="assets/video/intro.mp4" type="video/mp4" />
+        </video>
+        <div id="hero-video-overlay"></div>
+      </div>
+
+      <div id="hero-panel">
+        <div class="hero-scan-line"></div>
+        <div class="hero-tag" data-pt="// IDENTIFICAÇÃO DO OPERADOR" data-en="// OPERATOR IDENTIFICATION">// IDENTIFICAÇÃO DO OPERADOR</div>
+        <div class="hero-avatar-wrap">
+          <div class="avatar-ring"></div>
+          <img src="assets/imgs/profile.png" alt="Guilherme Gonçalves" class="hero-avatar" loading="eager" onerror="this.style.display='none';document.querySelector('.avatar-placeholder').style.display='flex'" />
+          <div class="avatar-placeholder">GG</div>
+        </div>
+        <h1 class="hero-name">GUILHERME<br/><span class="accent">GONÇALVES</span></h1>
+        <div class="hero-role">
+          <span class="blink-cursor">▮</span>
+          <span class="role-text" data-pt="DESENVOLVEDOR WEB · ESTUDANTE ADS" data-en="WEB DEVELOPER · ADS STUDENT">DESENVOLVEDOR WEB · ESTUDANTE ADS</span>
+        </div>
+        <p class="hero-summary" data-pt="Estudante de Análise e Desenvolvimento de Sistemas com formação técnica pelo SENAI e experiência prática no desenvolvimento de aplicações web" data-en="Systems Analysis and Development student with technical background from SENAI and hands-on experience in web application development">
+          Estudante de Análise e Desenvolvimento de Sistemas com formação técnica pelo SENAI e experiência prática no desenvolvimento de aplicações web
+        </p>
+        <div class="hero-meta">
+          <div class="meta-item">
+            <span class="meta-icon">◉</span>
+            <span data-pt="Taubaté – SP" data-en="Taubaté – SP">Taubaté – SP</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-dot available"></span>
+            <span data-pt="DISPONÍVEL" data-en="AVAILABLE">DISPONÍVEL</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a href="https://wa.me/5512991910939" target="_blank" class="action-btn action-btn--whatsapp">
+            <span>📱</span>
+            <span data-pt="WHATSAPP" data-en="WHATSAPP">WHATSAPP</span>
+          </a>
+          <a href="mailto:contatoguilhermegoncalves2026@gmail.com" class="action-btn action-btn--email">
+            <span>✉</span>
+            <span data-pt="E-MAIL" data-en="E-MAIL">E-MAIL</span>
+          </a>
+          <a href="https://www.linkedin.com/in/guilherme-goncalves-86a0323ab/" target="_blank" class="action-btn action-btn--linkedin">
+            <span>in</span>
+            <span>LINKEDIN</span>
+          </a>
+          <a href="https://github.com/CapitainPrice" target="_blank" class="action-btn action-btn--github">
+            <span>⌥</span>
+            <span>GITHUB</span>
+          </a>
+        </div>
+      </div>
+      <div class="corner corner--tl"></div>
+      <div class="corner corner--tr"></div>
+      <div class="corner corner--bl"></div>
+      <div class="corner corner--br"></div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section">
+      <div class="section-header">
+        <div class="section-tag">01</div>
+        <h2 class="section-title" data-pt="SOBRE MIM" data-en="ABOUT ME">SOBRE MIM</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="about-grid">
+        <div class="about-card glass-card fade-in">
+          <div class="card-label" data-pt="FORMAÇÃO ACADÊMICA" data-en="EDUCATION">FORMAÇÃO ACADÊMICA</div>
+          <div class="education-list">
+            <div class="edu-item active">
+              <div class="edu-status active" data-pt="EM CURSO" data-en="IN PROGRESS">EM CURSO</div>
+              <div class="edu-course">TECNÓLOGO EM ANÁLISE E DESENVOLVIMENTO DE SISTEMAS</div>
+              <div class="edu-inst">Faculdade SENAI — Taubaté/SP</div>
+              <div class="edu-period">2024 — Conclusão: 2027</div>
+            </div>
+            <div class="edu-divider"></div>
+            <div class="edu-item done">
+              <div class="edu-status done" data-pt="CONCLUÍDO" data-en="COMPLETED">CONCLUÍDO</div>
+              <div class="edu-course">TÉCNICO EM ANÁLISE E DESENVOLVIMENTO DE SISTEMAS</div>
+              <div class="edu-inst">SENAI — Cruzeiro/SP</div>
+              <div class="edu-period">2024 — 2025</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-card glass-card fade-in">
+          <div class="card-label" data-pt="STATUS DO SISTEMA" data-en="SYSTEM STATUS">STATUS DO SISTEMA</div>
+          <div class="system-stats">
+            <div class="stat-row">
+              <span data-pt="Localização" data-en="Location">Localização</span>
+              <span class="stat-val">Taubaté, SP</span>
+            </div>
+            <div class="stat-row">
+              <span>Status</span>
+              <span class="stat-val available" data-pt="Disponível" data-en="Available">Disponível</span>
+            </div>
+            <div class="stat-row">
+              <span>GitHub</span>
+              <span class="stat-val"><a href="https://github.com/CapitainPrice" target="_blank">CapitainPrice</a></span>
+            </div>
+            <div class="stat-row">
+              <span>LinkedIn</span>
+              <span class="stat-val"><a href="https://www.linkedin.com/in/guilherme-goncalves-86a0323ab/" target="_blank">guilherme-goncalves</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="section">
+      <div class="section-header">
+        <div class="section-tag">02</div>
+        <h2 class="section-title" data-pt="PROJETOS" data-en="PROJECTS">PROJETOS</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card glass-card fade-in">
+          <div class="project-header">
+            <div class="project-id">P.001</div>
+            <div class="project-status active" data-pt="ATIVO" data-en="ACTIVE">ATIVO</div>
+          </div>
+          <h3 class="project-name">MARIO HEAD</h3>
+          <p class="project-desc" data-pt="Jogo com multiverso de personagens..." data-en="Game with multiverse of characters...">Jogo com multiverso de personagens...</p>
+          <div class="project-stack">
+            <span class="stack-tag">HTML5</span>
+            <span class="stack-tag">CSS3</span>
+            <span class="stack-tag">JavaScript</span>
+          </div>
+          <div class="project-footer">
+            <span class="project-year">2026</span>
+            <a href="https://capitainprice.github.io/JogoTuba/Project/index.html" target="_blank" class="project-link" data-pt="ACESSAR" data-en="ACCESS">ACESSAR ↗</a>
+          </div>
+        </div>
+        <div class="project-card glass-card fade-in">
+          <div class="project-header">
+            <div class="project-id">P.002</div>
+            <div class="project-status active" data-pt="ATIVO" data-en="ACTIVE">ATIVO</div>
+          </div>
+          <h3 class="project-name">ZENTASK</h3>
+          <p class="project-desc" data-pt="Otimizador de tarefas do dia a dia..." data-en="Daily task optimizer...">Otimizador de tarefas do dia a dia...</p>
+          <div class="project-stack">
+            <span class="stack-tag">HTML5</span>
+            <span class="stack-tag">CSS3</span>
+            <span class="stack-tag">JavaScript</span>
+            <span class="stack-tag">Firebase</span>
+          </div>
+          <div class="project-footer">
+            <span class="project-year">2026</span>
+            <a href="https://capitainprice.github.io/ZenTask-Gerenciador-De-Tarefas/index.html" target="_blank" class="project-link" data-pt="ACESSAR" data-en="ACCESS">ACESSAR ↗</a>
+          </div>
+        </div>
+        <div class="project-card glass-card fade-in">
+          <div class="project-header">
+            <div class="project-id">P.003</div>
+            <div class="project-status active" data-pt="ATIVO" data-en="ACTIVE">ATIVO</div>
+          </div>
+          <h3 class="project-name">PLATAFORMA DE CURSOS</h3>
+          <p class="project-desc" data-pt="Plataforma web completa para venda de cursos..." data-en="Complete web platform for course sales...">Plataforma web completa para venda de cursos...</p>
+          <div class="project-stack">
+            <span class="stack-tag">PHP</span>
+            <span class="stack-tag">MySQL</span>
+            <span class="stack-tag">HTML5</span>
+            <span class="stack-tag">CSS3</span>
+            <span class="stack-tag">JavaScript</span>
+          </div>
+          <div class="project-footer">
+            <span class="project-year">2024–2026</span>
+            <a href="https://dgconsultoriasst.com/" target="_blank" class="project-link" data-pt="ACESSAR" data-en="ACCESS">ACESSAR ↗</a>
+          </div>
+        </div>
+        <div class="project-card glass-card fade-in">
+          <div class="project-header">
+            <div class="project-id">P.004</div>
+            <div class="project-status study" data-pt="EM ESTUDO" data-en="STUDY">EM ESTUDO</div>
+          </div>
+          <h3 class="project-name">JARVIS — HUD INTERFACE IA</h3>
+          <p class="project-desc" data-pt="Dashboard interativo inspirado no JARVIS..." data-en="Interactive dashboard inspired by JARVIS...">Dashboard interativo inspirado no JARVIS...</p>
+          <div class="project-stack">
+            <span class="stack-tag">HTML5</span>
+            <span class="stack-tag">CSS3</span>
+            <span class="stack-tag">JavaScript</span>
+            <span class="stack-tag">Canvas API</span>
+          </div>
+          <div class="project-footer">
+            <span class="project-year">2026</span>
+            <span class="project-link disabled" data-pt="EM DEV" data-en="IN DEV">EM DEV</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section id="skills" class="section">
+      <div class="section-header">
+        <div class="section-tag">03</div>
+        <h2 class="section-title" data-pt="HABILIDADES" data-en="SKILLS">HABILIDADES</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-container">
+        <div class="skills-group fade-in">
+          <div class="group-label" data-pt="DESENVOLVIMENTO WEB" data-en="WEB DEVELOPMENT">DESENVOLVIMENTO WEB</div>
+          <div class="skill-item">
+            <div class="skill-meta">
+              <span class="skill-name">HTML5</span>
+              <span class="skill-pct">90%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-pct="90"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-meta">
+              <span class="skill-name">CSS3</span>
+              <span class="skill-pct">85%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-pct="85"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-meta">
+              <span class="skill-name">JavaScript</span>
+              <span class="skill-pct">75%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-pct="75"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-meta">
+              <span class="skill-name">PHP</span>
+              <span class="skill-pct">70%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-pct="70"></div></div>
+          </div>
+        </div>
+        <div class="skills-group fade-in">
+          <div class="group-label" data-pt="BANCO DE DADOS & FERRAMENTAS" data-en="DATABASE & TOOLS">BANCO DE DADOS & FERRAMENTAS</div>
+          <div class="skill-item">
+            <div class="skill-meta">
+              <span class="skill-name">MySQL</span>
+              <span class="skill-pct">78%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-pct="78"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-meta">
+              <span class="skill-name">Git</span>
+              <span class="skill-pct">72%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-pct="72"></div></div>
+          </div>
+          <div class="group-label" style="margin-top:2rem" data-pt="REDES & INFRAESTRUTURA" data-en="NETWORKS & INFRA">REDES & INFRAESTRUTURA</div>
+          <div class="skill-item">
+            <div class="skill-meta">
+              <span class="skill-name">CCNA — Redes</span>
+              <span class="skill-pct">🏅</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" data-pct="65"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS SECTION -->
+    <section id="certs" class="section">
+      <div class="section-header">
+        <div class="section-tag">04</div>
+        <h2 class="section-title" data-pt="CERTIFICAÇÕES" data-en="CERTIFICATIONS">CERTIFICAÇÕES</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="certs-grid">
+        <div class="cert-card glass-card fade-in cert-featured">
+          <div class="cert-badge-wrap">
+            <iframe
+              src="https://www.credly.com/badge/1a073aef-c649-40bf-9a6a-c83d0808ef04"
+              width="120"
+              height="150"
+              style="border:0; border-radius:8px;"
+              title="CCNA Badge"
+              loading="lazy">
+            </iframe>
+          </div>
+          <div class="cert-info">
+            <div class="cert-org">Cisco Networking Academy</div>
+            <div class="cert-name">CCNA: Introduction to Networks</div>
+            <div class="cert-year">2025</div>
+            <a href="https://www.credly.com/badges/1a073aef-c649-40bf-9a6a-c83d0808ef04/public_url" target="_blank" class="cert-link" data-pt="VER BADGE" data-en="VIEW BADGE">VER BADGE ↗</a>
+          </div>
+        </div>
+        <div class="cert-card glass-card fade-in">
+          <div class="cert-icon">🔒</div>
+          <div class="cert-info">
+            <div class="cert-org">SENAI</div>
+            <div class="cert-name" data-pt="LGPD — Lei Geral de Proteção de Dados" data-en="LGPD — General Data Protection Law">LGPD — Lei Geral de Proteção de Dados</div>
+            <div class="cert-year">2024</div>
+          </div>
+        </div>
+        <div class="cert-card glass-card fade-in">
+          <div class="cert-icon">📡</div>
+          <div class="cert-info">
+            <div class="cert-org">SENAI</div>
+            <div class="cert-name" data-pt="Desvendando o 5G" data-en="Unveiling 5G">Desvendando o 5G</div>
+            <div class="cert-year">2024</div>
+          </div>
+        </div>
+        <div class="cert-card glass-card fade-in">
+          <div class="cert-icon">⚙️</div>
+          <div class="cert-info">
+            <div class="cert-org">SENAI</div>
+            <div class="cert-name" data-pt="Segurança no Trabalho" data-en="Workplace Safety">Segurança no Trabalho</div>
+            <div class="cert-year">2024</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section">
+      <div class="section-header">
+        <div class="section-tag">05</div>
+        <h2 class="section-title" data-pt="CONTATO" data-en="CONTACT">CONTATO</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="contact-grid">
+        <a href="https://wa.me/5512991910939" target="_blank" class="contact-card glass-card fade-in">
+          <div class="contact-icon">📱</div>
+          <div class="contact-label">WhatsApp</div>
+          <div class="contact-val" data-pt="Enviar mensagem" data-en="Send message">Enviar mensagem</div>
+        </a>
+        <a href="mailto:contatoguilhermegoncalves2026@gmail.com" class="contact-card glass-card fade-in">
+          <div class="contact-icon">✉</div>
+          <div class="contact-label">E-mail</div>
+          <div class="contact-val">contatoguilhermegoncalves</div>
+        </a>
+        <a href="https://www.linkedin.com/in/guilherme-goncalves-86a0323ab/" target="_blank" class="contact-card glass-card fade-in">
+          <div class="contact-icon">in</div>
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-val">guilherme-goncalves</div>
+        </a>
+        <a href="https://github.com/CapitainPrice" target="_blank" class="contact-card glass-card fade-in">
+          <div class="contact-icon">⌥</div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-val">CapitainPrice</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+      <div class="footer-line"></div>
+      <div class="footer-content">
+        <span class="footer-copy">© 2026 GUILHERME GONÇALVES</span>
+        <span class="footer-version">v1.0.0 · JARVIS PORTFOLIO SYSTEM</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- PRINT OVERLAY -->
+  <div id="print-overlay">
+    <div class="print-msg glass-card">
+      <div class="cv-icon">📄</div>
+      <h3 class="cv-title" data-pt="BAIXAR CURRÍCULO" data-en="DOWNLOAD RESUME">BAIXAR CURRÍCULO</h3>
+      <p class="cv-desc" data-pt="Clique no botão abaixo para baixar seu currículo em PDF" data-en="Click the button below to download your resume as PDF">Clique no botão abaixo para baixar seu currículo em PDF</p>
+      <div class="print-actions">
+        <a id="print-cv-link" href="assets/cv/Guilherme_Emanuel_Goncalves_Estagio_TI.pdf" download="Guilherme_Goncalves_Curriculo.pdf" class="hud-btn hud-btn--accent cv-download-btn" data-pt="⬇ BAIXAR PDF" data-en="⬇ DOWNLOAD PDF">
+          <span>⬇</span>
+          <span data-pt="BAIXAR PDF" data-en="DOWNLOAD PDF">BAIXAR PDF</span>
+        </a>
+        <button id="print-close" class="hud-btn" data-pt="FECHAR" data-en="CLOSE">
+          <span>✕</span>
+          <span data-pt="FECHAR" data-en="CLOSE">FECHAR</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="style/js/portfolio.js"></script>
+
+</script>
+</body>
+</html>
